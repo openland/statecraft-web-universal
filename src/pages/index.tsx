@@ -1,19 +1,26 @@
 import * as React from 'react';
 import { withAccountQuery } from '../api/Account';
 import { BrowserRouter, StaticRouter } from 'react-router-dom';
-import { ApolloProvider } from 'react-apollo';
-import { apolloClient } from '../utils/apolloClient';
+// import { ApolloProvider } from 'react-apollo';
+// import { apolloClient } from '../utils/apolloClient';
 import { canUseDOM } from '../utils/environment';
-
-const BasePage = (props: { children: any }) => {
-    if (canUseDOM) {
-        return <ApolloProvider client={apolloClient}><BrowserRouter>{props.children}</BrowserRouter></ApolloProvider>
-    } else {
-        return <ApolloProvider client={apolloClient}><StaticRouter location={"/"}>{props.children}</StaticRouter></ApolloProvider>
-    }
-}
+import { withData } from '../utils/withData';
+// const BasePage = withData((props: { children: any }) => {
+//     if (canUseDOM) {
+//         return <BrowserRouter>{props.children}</BrowserRouter>
+//     } else {
+//         return <StaticRouter location={"/"} context={{}}>{props.children}</StaticRouter>
+//     }
+// });
 
 const Page = withAccountQuery((props) => {
+    console.warn(props);
     return <div>Welcome</div>
 });
-export default () => <BasePage><Page /></BasePage>;
+export default withData((props: { children: any }) => {
+    if (canUseDOM) {
+        return <BrowserRouter><Page /></BrowserRouter>
+    } else {
+        return <StaticRouter location={"/"} context={{}}><Page /></StaticRouter>
+    }
+});

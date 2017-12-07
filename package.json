@@ -10,13 +10,17 @@
     "yarn": ">=1.0.0"
   },
   "dependencies": {
+    "@types/next": "^2.4.6",
+    "@types/prop-types": "^15.5.2",
     "@types/query-string": "^5.0.1",
     "@types/react": "^16.0.27",
     "@types/react-dom": "^16.0.3",
     "@types/react-router": "^4.0.19",
     "@types/react-router-dom": "^4.2.3",
     "exenv": "^1.2.2",
+    "isomorphic-fetch": "^2.2.1",
     "next": "^4.2.0",
+    "prop-types": "^15.6.0",
     "query-string": "^5.0.1",
     "react": "^16.2.0",
     "react-apollo": "1.4.16",
