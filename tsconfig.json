@@ -2,10 +2,10 @@
   "compilerOptions": {
     "outDir": "build/dist",
     "module": "commonjs",
-    "target": "es5",
+    "target": "es2015",
     "lib": [
-      "es5",
       "es6",
+      "es5",
       "dom"
     ],
     "sourceMap": true,

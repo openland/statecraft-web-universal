@@ -47,7 +47,6 @@
     "whatwg-fetch": "^2.0.3"
   },
   "scripts": {
-    "start": "node src/bin/start.js",
-    "server": "node src/bin/server.js"
+    "start": "DEBUG=isomorphic-webpack:* node src/bin/start.js"
   }
 }

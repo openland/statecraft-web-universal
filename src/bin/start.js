@@ -86,9 +86,9 @@ choosePort(HOST, DEFAULT_PORT)
 
         // Starting Dev Server with SSR
         const app = express();
-        app.use(webpackDevMiddleware(compiler, {
+        const middleware = webpackDevMiddleware(compiler, {
             noInfo: false,
-            publicPath: "/static",
+            publicPath: "/public",
             quiet: true,
             stats: {
                 assets: false,
@@ -98,39 +98,52 @@ choosePort(HOST, DEFAULT_PORT)
                 hash: false,
                 timings: false,
                 version: false
+            },
+            serverSideRender: true
+        });
+        app.use(middleware);
+        const { evalBundleCode } = createIsomorphicWebpack(config);
+
+        app.use((req, res, next) => {
+            const assetsByChunkName = res.locals.webpackStats.toJson().assetsByChunkName;
+
+            for (let ch of Object.getOwnPropertyNames(assetsByChunkName)) {
+                console.warn(ch);
+                for (let i in assetsByChunkName[ch]) {
+                    const bundle = assetsByChunkName[ch][i];
+                    // const map = assetsByChunkName[ch][1];
+                    const absoluteEntryBundleName = path.resolve(compiler.options.output.path, bundle);
+                    console.warn(absoluteEntryBundleName);
+                    const bundleCode = middleware.fileSystem.readFileSync(absoluteEntryBundleName, 'utf-8');
+                    fs.writeFile(__dirname + "/" + ch + "-" + i + ".js", bundleCode)
+                }
             }
-        }));
-        // const { evalBundleCode } = createIsomorphicWebpack(config);
-        // app.use((req, res, next) => {
-        //     const assetsByChunkName = res.locals.webpackStats.toJson().assetsByChunkName;
-        //     const bundle = assetsByChunkName['main'][0];
-        //     const map = assetsByChunkName['main'][1];
-        //     const absoluteEntryBundleName = path.resolve(compiler.options.output.path, bundle);
-        //     console.warn(absoluteEntryBundleName);
-        //     // const bundleCode = middleware.fileSystem.readFileSync(absoluteEntryBundleName, 'utf-8');
-        //     // const bundleMap = JSON.parse(middleware.fileSystem.readFileSync(absoluteEntryBundleName + ".map", 'utf-8'));
-        //     // try {
-        //     //     const evalRes = runInNewContext(bundleCode, {}, req.url, {});
-        //     //     console.warn(evalRes);
-        //     // } catch (e) {
-        //     //     console.warn("error");
-        //     //     console.warn(e);
-        //     // }
-        //     // const requireModule = evalCodeInBrowser(currentBundleCode, {}, windowUrl, customContext);
-        //     next()
-        // })
+
+
+            // const bundleMap = JSON.parse(middleware.fileSystem.readFileSync(absoluteEntryBundleName + ".map", 'utf-8'));
+            // try {
+            //     const evalRes = runInNewContext(bundleCode, {}, req.url, {});
+            //     console.warn(evalRes);
+            // } catch (e) {
+            //     console.warn("error");
+            //     console.warn(e);
+            // }
+            // const requireModule = evalCodeInBrowser(currentBundleCode, {}, windowUrl, customContext);
+            next()
+        })
 
         // // app.use(express.static(paths.appPublic));     
 
-        // app.get('/', (req, res) => {
-        //     const assetsByChunkName = res.locals.webpackStats.toJson().assetsByChunkName
-        //     const requestUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
-        //     const app = renderToString(evalBundleCode(requestUrl).default);
-        //     res.send(renderFullPage(app, normalizeAssets(assetsByChunkName.main)
-        //         .filter(path => path.endsWith('.js'))
-        //         .map(path => `<script src="${path}"></script>`)
-        //         .join('\n')));
-        // });
+        app.get('*', (req, res) => {
+            const assetsByChunkName = res.locals.webpackStats.toJson().assetsByChunkName
+            console.warn(assetsByChunkName);
+            const requestUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+            const app = renderToString(evalBundleCode(requestUrl).default);
+            res.send(renderFullPage(app, normalizeAssets(assetsByChunkName.main)
+                .filter(path => path.endsWith('.js'))
+                .map(path => `<script src="/public/${path}"></script>`)
+                .join('\n')));
+        });
 
         app.listen(port, HOST, err => {
             if (err) {
@@ -145,7 +158,6 @@ choosePort(HOST, DEFAULT_PORT)
 
         ['SIGINT', 'SIGTERM'].forEach(function (sig) {
             process.on(sig, function () {
-                app.close()
                 process.exit();
             });
         });
