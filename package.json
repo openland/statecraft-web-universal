@@ -24,6 +24,8 @@
     "express": "^4.16.2",
     "file-loader": "^1.1.5",
     "html-webpack-plugin": "^2.30.1",
+    "isomorphic-webpack": "^2.1.1",
+    "jsdom": "^11.5.1",
     "object-assign": "^4.1.1",
     "path": "^0.12.7",
     "postcss": "^6.0.14",
@@ -45,6 +47,7 @@
     "whatwg-fetch": "^2.0.3"
   },
   "scripts": {
-    "start": "node src/bin/start.js"
+    "start": "node src/bin/start.js",
+    "server": "node src/bin/server.js"
   }
 }

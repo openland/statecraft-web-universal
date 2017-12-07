@@ -1,8 +1,8 @@
 /* eslint-disable filenames/match-regex */
 
-import path from 'path';
+const path = require('path');
 
-export default {
+module.exports = {
   context: __dirname,
   entry: {
     app: [
@@ -13,7 +13,7 @@ export default {
     loaders: [
       {
         include: path.resolve(__dirname, './app'),
-        loader: 'babel-loader',
+        loader: 'ts-loader',
         test: /\.js$/
       },
       {

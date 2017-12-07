@@ -4,8 +4,9 @@ const RenderApp = () => {
     return <div>Yo!</div>;
 };
 const App = <div><RenderApp /></div>;
-// if (typeof ISOMORPHIC_WEBPACK === 'undefined') {
-//     ReactDOM.hydrate(App, document.getElementById('app'));
-// }
-ReactDOM.render(App, document.getElementById('root'));
+declare var ISOMORPHIC_WEBPACK: any;
+if (typeof ISOMORPHIC_WEBPACK === 'undefined') {
+    ReactDOM.hydrate(App, document.getElementById('app'));
+}
+// ReactDOM.render(App, document.getElementById('root'));
 export default App;

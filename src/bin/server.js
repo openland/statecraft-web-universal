@@ -1,16 +1,16 @@
-import express from 'express';
-import webpack from 'webpack';
-import webpackDevMiddleware from 'webpack-dev-middleware';
-import path from 'path';
-import webpackConfiguration from '../webpack.configuration';
-import { createIsomorphicWebpack } from 'isomorphic-webpack';
-import { renderToString } from 'react-dom/server';
+const express = require('express');
+const webpack = require('webpack');
+const webpackDevMiddleware = require('webpack-dev-middleware');
+const path = require('path');
+const webpackConfiguration = require('../webpack.configuration');
+const { createIsomorphicWebpack } = require('isomorphic-webpack');
+const { renderToString } = require('react-dom/server');
 
 const compiler = webpack(webpackConfiguration);
 const app = express();
 app.use(webpackDevMiddleware(compiler, {
   noInfo: false,
-  publicPath: '/static',
+  publicPath: webpackConfiguration.output.path,
   quiet: false,
   stats: {
     assets: false,
@@ -27,8 +27,8 @@ const {
   createCompilationPromise,
   evalBundleCode
 } = createIsomorphicWebpack(webpackConfiguration, {
-  useCompilationPromise: true
-});
+    useCompilationPromise: true
+  });
 
 app.use(async (req, res, next) => {
   await createCompilationPromise();
@@ -52,7 +52,7 @@ const renderFullPage = (body) => {
 
 app.get('/', (req, res) => {
   const requestUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
-  
+
   const app = renderToString(evalBundleCode(requestUrl).default);
 
   res.send(renderFullPage(app));

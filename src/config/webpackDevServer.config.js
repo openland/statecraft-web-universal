@@ -8,7 +8,7 @@ const paths = require('./paths');
 const protocol = process.env.HTTPS === 'true' ? 'https' : 'http';
 const host = process.env.HOST || '0.0.0.0';
 
-module.exports = function (proxy, allowedHost, compiler) {
+module.exports = function (proxy, allowedHost) {
     return {
         // WebpackDevServer 2.4.3 introduced a security fix that prevents remote
         // websites from potentially accessing local content through DNS rebinding:
@@ -87,29 +87,6 @@ module.exports = function (proxy, allowedHost, compiler) {
             // it used the same host and port.
             // https://github.com/facebookincubator/create-react-app/issues/2272#issuecomment-302832432
             app.use(noopServiceWorkerMiddleware());
-
-            // function webpackStatsMiddleware(compiler) {
-            //     let latestStats;
-            //     compiler.plugin('done', stats => latestStats = stats);
-            //     return (req, res, next) => {
-            //         req.locals.webpackStats = latestStats;
-            //         next();
-            //     }
-            // }
-
-            app.get('/', (req, res) => {
-                const files = stats.compilation.chunks[0].files.filter((file) => {
-                    return /\.js$/.test(file);
-                });
-                const bundleName = files[files.length - 1];
-                let chunks = compiler.stats.toJson().assetsByChunkName
-                console.warn(chunks)
-                // const requestUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
-
-                // const app = renderToString(evalBundleCode(requestUrl).default);
-
-                res.send("!");
-            });
         },
     };
 };
