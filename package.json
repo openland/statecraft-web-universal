@@ -6,45 +6,22 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "@types/express": "^4.0.39",
-    "@types/node": "^8.0.56",
-    "@types/promise": "^7.1.30",
     "@types/react": "^16.0.27",
     "@types/react-dom": "^16.0.3",
-    "@types/webpack": "^3.8.1",
-    "@types/webpack-dev-middleware": "^1.9.4",
-    "@types/whatwg-fetch": "^0.0.33",
+    "next": "^4.2.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0"
   },
   "devDependencies": {
-    "autoprefixer": "7.1.0",
-    "case-sensitive-paths-webpack-plugin": "^2.1.1",
-    "css-loader": "^0.28.7",
-    "express": "^4.16.2",
-    "file-loader": "^1.1.5",
-    "html-webpack-plugin": "^2.30.1",
-    "object-assign": "^4.1.1",
-    "path": "^0.12.7",
-    "postcss": "^6.0.14",
-    "postcss-loader": "^2.0.9",
-    "promise": "^8.0.1",
-    "react-dev-utils": "^4.2.1",
-    "source-map-loader": "^0.2.3",
-    "style-loader": "^0.19.0",
-    "ts-loader": "^3.2.0",
-    "ts-node": "^3.3.0",
-    "tslint": "^5.8.0",
-    "tslint-loader": "^3.5.3",
-    "tslint-react": "^3.2.0",
-    "typescript": "^2.6.2",
-    "url-loader": "^0.6.2",
-    "webpack": "^3.10.0",
-    "webpack-dev-middleware": "^1.12.2",
-    "webpack-dev-server": "^2.9.6",
-    "whatwg-fetch": "^2.0.3"
+    "concurrently": "^3.5.1"
   },
   "scripts": {
-    "start": "node src/bin/start.js"
+    "prebuild": "tsc",
+    "build": "yarn next build ./build/dist",
+    "predev": "tsc",
+    "dev": "concurrently \"yarn build:ts:watch\" \"yarn next ./build/dist\"",
+    "start": "yarn next start ./build/dist",
+    "build:ts": "tsc",
+    "build:ts:watch": "tsc --watch"
   }
 }
