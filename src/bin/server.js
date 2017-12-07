@@ -52,7 +52,7 @@ const renderFullPage = (body) => {
 
 app.get('/', (req, res) => {
   const requestUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
-
+  
   const app = renderToString(evalBundleCode(requestUrl).default);
 
   res.send(renderFullPage(app));
