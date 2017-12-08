@@ -2829,7 +2829,7 @@ a.st-header--label:hover {
   }
 }
 .x-page {
-  font: normal normal 14px/20px 'Aktiv Grotesk Corp', arial, sans-serif;
+  font: normal normal 14px/20px -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
   background: #F5F6F8;
   color: #182642;
 }
