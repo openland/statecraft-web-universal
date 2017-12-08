@@ -101,5 +101,7 @@ const BuildingProjectsQuery = gql`
   }
   `;
 
-export const withBuildingProjectsQuery = graphqlList<BuildingProject, BuildingProjectsQueryStats>(BuildingProjectsQuery);
-export const withBuildingProjectsStats = graphqlRouted<{ stats: BuildingProjectsStats }>(BuildingProjectsStatsQuery);
+export const withBuildingProjectsQuery = graphqlList<BuildingProject, BuildingProjectsQueryStats>(
+    BuildingProjectsQuery,
+    ['cursor', 'minUnits', 'year', 'filter']);
+export const withBuildingProjectsStats = graphqlRouted<{ stats: BuildingProjectsStats }>(BuildingProjectsStatsQuery, []);

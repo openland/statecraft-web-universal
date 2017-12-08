@@ -38,4 +38,4 @@ const QueryCity = gql`
    }
  `;
 
-export const withAccountQuery = graphqlRouted<AccountResponse>(QueryCity);
+export const withAccountQuery = graphqlRouted<AccountResponse>(QueryCity, []);
