@@ -46,7 +46,7 @@
     "tslint-react": "^3.2.0"
   },
   "scripts": {
-    "prebuild": "./node_modules/typescript/bin/tsc & yarn assets",
+    "prebuild": "./node_modules/typescript/bin/tsc && yarn assets",
     "build": "yarn next build ./build/dist",
     "predev": "./node_modules/typescript/bin/tsc",
     "assets": "yarn cpx \"./src/static/**/*\" ./build/dist/static/",
