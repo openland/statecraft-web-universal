@@ -4,25 +4,9 @@ import { withData } from '../utils/withData';
 import { UserInfoProvider } from '../components/UserInfo';
 import { QueryProps } from 'react-apollo';
 import Error from 'next/error';
-import Router from 'next/router';
 import { Page } from './Page';
 import { Loader } from './Loaders';
-import * as NProgress from 'nprogress';
-
-//
-// Setup Loader
-//
-
-Router.onRouteChangeStart = (url) => {
-    console.log(`Naviating to: ${url}`); // tslint:disable
-    NProgress.start();
-};
-
-Router.onRouteChangeComplete = () => {
-    console.log(`Naviating Complete`); // tslint:disable
-     NProgress.done();
-}
-Router.onRouteChangeError = () => NProgress.done();
+import '../utils/routing';
 
 //
 // Root Loader. We shouldn't render anything untill page is loaded since we have global progress indicator.

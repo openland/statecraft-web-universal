@@ -6,7 +6,7 @@ import Head from 'next/head';
 import { canUseDOM } from './environment';
 import { apolloClient } from './apolloClient';
 import { getToken } from './auth';
-
+import { isPageChanged } from './routing';
 import 'isomorphic-fetch';
 import { NormalizedCacheObject } from 'apollo-cache-inmemory';
 
@@ -70,7 +70,8 @@ export const withData = (ComposedComponent: React.ComponentType) => {
                         token: token
                     }
                 };
-            } else {
+            } else if (isPageChanged()) {
+                console.warn(ctx);
                 const apollo = apolloClient(serverState, token);
                 // Provide the `url` prop data in case a GraphQL query uses it
                 // const url = { query: ctx.query, pathname: ctx.pathname }
