@@ -54,6 +54,7 @@
     "build:ts": "tsc",
     "build:ts:watch": "tsc --watch",
     "export": "yarn next export ./build/dist",
-    "analyze": "cross-env ANALYZE=1 next build ./build/dist"
+    "analyze": "cross-env ANALYZE=1 next build ./build/dist",
+    "heroku-postbuild": "yarn build"
   }
 }
