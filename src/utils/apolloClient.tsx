@@ -8,9 +8,9 @@ let cachedClient: ApolloClient<NormalizedCacheObject> | undefined = undefined;
 const buildClient = (initialState?: any, token?: string) => {
     var headers: any = {};
     headers['x-statecraft-domain'] = 'sf';
-    // if (token) {
-    //     headers.authorization = 'Bearer ' + token;
-    // }
+    if (token) {
+        headers.authorization = 'Bearer ' + token;
+    }
     console.warn('Build client');
     var cache = new InMemoryCache();
     if (initialState) {
@@ -19,6 +19,7 @@ const buildClient = (initialState?: any, token?: string) => {
     return new ApolloClient({
         link: new HttpLink({
             uri: 'https://statecraft-api.herokuapp.com/api/',
+            // uri: 'http://localhost:9000/api/',
             headers: headers
         }),
         cache: cache,

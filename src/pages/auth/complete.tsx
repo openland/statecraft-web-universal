@@ -36,7 +36,7 @@ class AuthenticationHandler extends React.Component<{}, { error: boolean }> {
             ]
         });
         if (uploaded.ok) {
-            Cookie.set('statecraft-key', auth.idToken, { expires: auth.expiresIn });
+            Cookie.set('statecraft-key', auth.idToken, { expires: auth.expiresIn / (24 * 60.0 * 60.0) });
             createHistory({
                 forceRefresh: true
             }).replace('/');
