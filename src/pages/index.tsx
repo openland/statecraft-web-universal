@@ -3,11 +3,11 @@ import { withPage } from '../components/withPage';
 import { HeaderLarge, HeaderLargeTitle, HeaderLargeSocial } from '../components/Header';
 import { withBuildingProjectsStats } from '../api/BuildingProjects';
 import { withLoader } from '../components/withLoader';
-import { Counters, CounterItem } from '../components/Counters';
-import { Insights, InsightItem } from '../components/Insight';
+import { Counters, CounterItem } from '../components/Landing/Counters';
+import { Insights, InsightItem } from '../components/Landing/Insight';
 import { Footer } from '../components/Footer';
-import { Pipeline } from '../components/Pipeline';
-import { ContributersInvite } from '../components/ContributersInvite';
+import { PipelineIntro } from '../components/Landing/PipelineIntro';
+import { ContributersInvite } from '../components/Landing/ContributersInvite';
 
 const Index = withBuildingProjectsStats(withLoader((props) => {
     return (
@@ -36,7 +36,7 @@ const Index = withBuildingProjectsStats(withLoader((props) => {
                     text="Based on the current data, housing production in 2017-2018 will represent a significant drop from record-high 2016 level of 5000+ units. The extend of this downturn will be more clear as verification process progresses forward."
                 />
             </Insights>
-            <Pipeline />
+            <PipelineIntro />
             <ContributersInvite />
             <Insights title="About Us" dark={true}>
                 <InsightItem

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Formatted } from './Formatted';
+import { Formatted } from '../Formatted';
 
 export function InsightItem(props: { title: string, text: string }) {
     return (

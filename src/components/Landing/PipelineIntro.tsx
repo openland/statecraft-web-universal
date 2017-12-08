@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Link } from './Link';
+import { Link } from '../Link';
 
-export function Pipeline() {
+export function PipelineIntro() {
     return (
         <div className="x-pipeline">
             <div className="x-container">
