@@ -13,6 +13,7 @@
     "@types/auth0-js": "^8.11.0",
     "@types/js-cookie": "^2.1.0",
     "@types/markdown-it": "^0.0.4",
+    "@types/marked": "^0.3.0",
     "@types/next": "^2.4.6",
     "@types/nprogress": "^0.0.29",
     "@types/prop-types": "^15.5.2",
@@ -26,6 +27,7 @@
     "isomorphic-fetch": "^2.2.1",
     "js-cookie": "^2.2.0",
     "markdown-it": "^8.4.0",
+    "marked": "^0.3.7",
     "next": "^4.2.0",
     "nprogress": "^0.2.0",
     "prop-types": "^15.6.0",
@@ -38,17 +40,20 @@
   },
   "devDependencies": {
     "concurrently": "^3.5.1",
-    "cpx": "^1.5.0"
+    "cpx": "^1.5.0",
+    "cross-env": "^5.1.1",
+    "webpack-bundle-analyzer": "^2.9.1"
   },
   "scripts": {
     "prebuild": "tsc",
     "build": "yarn next build ./build/dist",
     "predev": "tsc",
-    "assets:watch": "cpx ./src/static/**/* ./build/dist/static/ --watch",
+    "assets:watch": "cpx \"./src/static/**/*\" ./build/dist/static/ --watch",
     "dev": "concurrently \"yarn build:ts:watch\" \"yarn next ./build/dist\" \"yarn assets:watch\"",
     "start": "yarn next start ./build/dist",
     "build:ts": "tsc",
     "build:ts:watch": "tsc --watch",
-    "export": "yarn next export ./build/dist"
+    "export": "yarn next export ./build/dist",
+    "analyze": "cross-env ANALYZE=1 next build ./build/dist"
   }
 }

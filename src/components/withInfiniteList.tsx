@@ -29,13 +29,17 @@ class PageEndDetector extends React.Component<{ onLoadMore: () => void }> {
     }
 
     componentWillUnmount() {
-        window.removeEventListener('scroll', this.checkWindowScroll);
-        window.removeEventListener('resize', this.checkWindowScroll);
+        if (canUseDOM) {
+            window.removeEventListener('scroll', this.checkWindowScroll);
+            window.removeEventListener('resize', this.checkWindowScroll);
+        }
     }
 
     checkWindowScroll = () => {
-        if (this.sentinel!!.getBoundingClientRect().top - window.innerHeight < 100) {
-            this.props.onLoadMore();
+        if (canUseDOM) {
+            if (this.sentinel!!.getBoundingClientRect().top - window.innerHeight < 100) {
+                this.props.onLoadMore();
+            }
         }
     }
 

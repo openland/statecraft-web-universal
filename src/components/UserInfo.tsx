@@ -2,9 +2,9 @@ import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import { Account } from '../api/Account';
 import { User } from '../api/User';
-import { AuthenticationController } from '../utils/auth';
+import { withRouter, SingletonRouter } from 'next/router';
 
-export class UserInfoProvider extends React.Component<{ user?: User, account: Account }> implements React.ChildContextProvider<{}> {
+export class UserInfoProvider extends React.Component<{ user?: User, account: Account, router: SingletonRouter }> implements React.ChildContextProvider<{}> {
     static childContextTypes = {
         user: PropTypes.object,
         account: PropTypes.object.isRequired,
@@ -32,10 +32,10 @@ export class UserInfoProvider extends React.Component<{ user?: User, account: Ac
             account: this.props.account,
             isLoggedIn: this.props.user != undefined,
             doLogin: () => {
-                new AuthenticationController().startAuth()
+                this.props.router.push("/auth/login")
             },
             doLogout: () => {
-                new AuthenticationController().logOut()
+                this.props.router.push("/auth/logout")
             }
         };
     }
@@ -77,7 +77,7 @@ class UserInfoReceiver extends React.Component<{ render: React.ComponentType<Use
 }
 
 export function withUserInfo<P>(WrappedComponent: React.ComponentType<P & UserInfoComponentProps>): React.ComponentType<P> {
-    return function (props: P) {
+    return withRouter<P>((props) => {
         return <UserInfoReceiver render={WrappedComponent} {...props} />;
-    };
+    });
 }

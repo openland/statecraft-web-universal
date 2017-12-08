@@ -1,6 +1,14 @@
 import * as React from 'react';
-import { AuthenticationController } from '../../utils/auth';
+import * as Cookie from 'js-cookie';
 import Error from 'next/error';
+import * as auth0 from 'auth0-js';
+import createHistory from 'history/createBrowserHistory';
+
+interface AuthResult {
+    expiresIn: number;
+    accessToken: string;
+    idToken: string;
+}
 
 export default class AuthenticationHandler extends React.Component<{}, { error: boolean }> {
 
@@ -10,11 +18,50 @@ export default class AuthenticationHandler extends React.Component<{}, { error: 
     }
 
     componentDidMount() {
-        new AuthenticationController().completeAuth().then((v) => {
+        this.completeAuth().then((v) => {
             // Do nothing
         }).catch((e) => {
             this.setState({ error: true });
         })
+    }
+
+    async completeAuth() {
+        let auth = await this.retreiveAuthentication();
+        var uploaded = await fetch('https://statecraft-api.herokuapp.com/auth', {
+            method: 'POST',
+            headers: [
+                ['authorization', 'Bearer ' + auth.idToken],
+                ['access-token', auth.accessToken]
+            ]
+        });
+        if (uploaded.ok) {
+            Cookie.set("statecraft-key", auth.idToken, { expires: auth.expiresIn });
+            createHistory({
+                forceRefresh: true
+            }).replace('/');
+        } else {
+            throw "Error"
+        }
+    }
+
+    private async retreiveAuthentication() {
+        let auth = new auth0.WebAuth({
+            domain: 'statecraft.auth0.com',
+            clientID: 'na0Pvis7KTzZWtzcIFT8MzIxtdpiLZc3',
+            redirectUri: window.location.origin + '/auth/complete',
+            audience: 'https://statecraft.auth0.com/userinfo',
+            responseType: 'token id_token',
+            scope: 'openid profile email'
+        });
+        return new Promise<AuthResult>((resolve, reject) => {
+            auth.parseHash((err, authResult: AuthResult) => {
+                if (err != null) {
+                    reject(err);
+                } else {
+                    resolve(authResult);
+                }
+            });
+        });
     }
 
     render() {

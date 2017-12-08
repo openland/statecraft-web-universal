@@ -46,6 +46,6 @@ function withRootLoader<P>(WrappedComponent: React.ComponentType<P>): React.Comp
 
 export function withPage(WrappedComponent: React.ComponentType<{}>) {
     return withData(withAccountQuery(withRootLoader((props) =>
-        <UserInfoProvider user={props.data.me} account={props.data.account}><Page><WrappedComponent /></Page></UserInfoProvider>
+        <UserInfoProvider user={props.data.me} account={props.data.account} router={props.router}><Page><WrappedComponent /></Page></UserInfoProvider>
     )));
 }
