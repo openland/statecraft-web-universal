@@ -14,7 +14,6 @@
 /* Сбрасываем значения по умолчанию для элементов | Let's default this puppy out
 -------------------------------------------------------------------------------*/
 @import "../fonts/icomoon/style.css";
-@import "../fonts/aktiv/style.css";
 html,
 body,
 body div,
@@ -631,7 +630,8 @@ html {
   height: 100%;
 }
 body {
-  font: normal normal 14px/20px 'Nunito Sans', arial, sans-serif;
+  font: normal normal 14px/20px;
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;  
   background: #f2f5f8;
   color: #2f3444;
   -webkit-text-size-adjust: 100%;
@@ -653,7 +653,7 @@ body {
 body input,
 body textarea,
 body button {
-  font-family: 'Nunito Sans', arial, sans-serif;
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;  
 }
 body *,
 body *:before,
@@ -2836,7 +2836,7 @@ a.st-header--label:hover {
 .x-page input,
 .x-page textarea,
 .x-page button {
-  font-family: 'Aktiv Grotesk Corp', arial, sans-serif;
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;  
 }
 .x-container {
   padding: 0 15px;
