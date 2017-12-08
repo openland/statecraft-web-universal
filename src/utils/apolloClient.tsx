@@ -11,7 +11,6 @@ const buildClient = (initialState?: any, token?: string) => {
     if (token) {
         headers.authorization = 'Bearer ' + token;
     }
-    console.warn('Build client');
     var cache = new InMemoryCache();
     if (initialState) {
         cache = cache.restore(initialState);

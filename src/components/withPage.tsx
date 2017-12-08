@@ -14,11 +14,14 @@ import * as NProgress from 'nprogress';
 //
 
 Router.onRouteChangeStart = (url) => {
-    // console.log(`Loading: ${url}`);
+    console.log(`Naviating to: ${url}`); // tslint:disable
     NProgress.start();
 };
 
-Router.onRouteChangeComplete = () => NProgress.done();
+Router.onRouteChangeComplete = () => {
+    console.log(`Naviating Complete`); // tslint:disable
+     NProgress.done();
+}
 Router.onRouteChangeError = () => NProgress.done();
 
 //

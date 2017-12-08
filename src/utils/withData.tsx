@@ -71,6 +71,23 @@ export const withData = (ComposedComponent: React.ComponentType) => {
                     }
                 };
             } else {
+                const apollo = apolloClient(serverState, token);
+                // Provide the `url` prop data in case a GraphQL query uses it
+                // const url = { query: ctx.query, pathname: ctx.pathname }
+                try {
+                    // Run all GraphQL queries
+                    await getDataFromTree(
+                        <ApolloProvider client={apollo}>
+                            <ComposedComponent />
+                        </ApolloProvider>
+                        ,
+                        { router: { query: ctx.query, pathname: ctx.pathname, asPath: ctx.asPath } });
+                } catch (error) {
+                    console.warn(error);
+                    // Prevent Apollo Client GraphQL errors from crashing SSR.
+                    // Handle them in components via the data.error prop:
+                    // http://dev.apollodata.com/react/api-queries.html#graphql-query-data-error
+                }
                 serverState = {
                     apollo: {
                         token: token
