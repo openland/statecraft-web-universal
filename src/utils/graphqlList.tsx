@@ -1,7 +1,7 @@
 import { graphql } from 'react-apollo';
 import { DocumentNode } from 'graphql';
 import { GraphQLRoutedComponentProps, NotNullableDataProps } from './graphql';
-import { RouteQueryStringProps, withRouterQueryString } from './withRouterQueryString';
+import { withRouter, SingletonRouter } from 'next/router';
 
 export interface ListQueryResponse<T, E> {
     items: ListQueryConnection<T> & E;
@@ -26,12 +26,11 @@ export type GraphQLListComponentProps<TResult, TExtras> = GraphQLRoutedComponent
 
 export function graphqlList<TResult, TExtras = {}>(document: DocumentNode) {
     return function (component: React.ComponentType<GraphQLListComponentProps<TResult, TExtras>>): React.ComponentType<{}> {
-        let qlWrapper = graphql<ListQueryResponse<TResult, TExtras>, RouteQueryStringProps, GraphQLListComponentProps<TResult, TExtras>>(document, {
-            options: (props: RouteQueryStringProps) => {
+        let qlWrapper = graphql<ListQueryResponse<TResult, TExtras>, { router: SingletonRouter }, GraphQLListComponentProps<TResult, TExtras>>(document, {
+            options: (props: { router: SingletonRouter }) => {
                 return {
                     variables: {
-                        ...props.match.params,
-                        ...props.queryString
+                        ...props.router.query
                     },
                     notifyOnNetworkStatusChange: true
                 };
@@ -46,8 +45,7 @@ export function graphqlList<TResult, TExtras = {}>(document: DocumentNode) {
                             props.data!!.fetchMore({
                                 query: document,
                                 variables: {
-                                    ...props.ownProps.queryString,
-                                    ...props.ownProps.match.params,
+                                    ...props.ownProps.router.query,
                                     cursor: props.data!!.items.edges.slice(-1)[0].cursor,
                                 },
                                 updateQuery: (previousResult, { fetchMoreResult }) => {
@@ -69,6 +67,6 @@ export function graphqlList<TResult, TExtras = {}>(document: DocumentNode) {
             }
         });
 
-        return withRouterQueryString(qlWrapper(component));
+        return withRouter(qlWrapper(component));
     };
 }

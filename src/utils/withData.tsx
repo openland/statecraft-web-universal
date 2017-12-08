@@ -12,7 +12,7 @@ function getComponentDisplayName(Component: any) {
     return Component.displayName || Component.name || 'Unknown'
 }
 
-export const withData = (ComposedComponent: React.ComponentType<{ url?: any }>) => {
+export const withData = (ComposedComponent: React.ComponentType) => {
     return class WithData extends React.Component<{ serverState: { apollo: { data: any, token?: string } } }> {
         static displayName = `WithData(${getComponentDisplayName(
             ComposedComponent
@@ -37,15 +37,16 @@ export const withData = (ComposedComponent: React.ComponentType<{ url?: any }>) 
             if (!canUseDOM) {
                 const apollo = apolloClient(serverState, token);
                 // Provide the `url` prop data in case a GraphQL query uses it
-                const url = { query: ctx.query, pathname: ctx.pathname }
+                // const url = { query: ctx.query, pathname: ctx.pathname }
                 try {
                     // Run all GraphQL queries
                     await getDataFromTree(
                         <ApolloProvider client={apollo}>
-                            <ComposedComponent url={url} />
+                            <ComposedComponent />
                         </ApolloProvider>
-                    )
+                        , { router: { query: ctx.query, pathname: ctx.pathname, asPath: ctx.asPath } })
                 } catch (error) {
+                    console.warn(error)
                     // Prevent Apollo Client GraphQL errors from crashing SSR.
                     // Handle them in components via the data.error prop:
                     // http://dev.apollodata.com/react/api-queries.html#graphql-query-data-error

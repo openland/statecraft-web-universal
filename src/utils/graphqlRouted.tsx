@@ -1,21 +1,20 @@
 import { graphql } from 'react-apollo';
 import { DocumentNode } from 'graphql';
-import { RouteQueryStringProps, withRouterQueryString } from './withRouterQueryString';
+import { withRouter, SingletonRouter } from 'next/router';
 import { GraphQLRoutedComponentProps } from './graphql';
 
 export function graphqlRouted<TResult>(document: DocumentNode) {
   return function (component: React.ComponentType<GraphQLRoutedComponentProps<TResult>>): React.ComponentType<{}> {
-    let qlWrapper = graphql<TResult, RouteQueryStringProps, GraphQLRoutedComponentProps<TResult>>(document, {
-      options: (props: RouteQueryStringProps) => {
+    let qlWrapper = graphql<TResult, { router: SingletonRouter }, GraphQLRoutedComponentProps<TResult>>(document, {
+      options: (props: { router: SingletonRouter }) => {
         return {
           variables: {
-            ...props.match.params,
-            ...props.queryString
+            ...props.router.query
           }
         };
       }
     });
 
-    return withRouterQueryString(qlWrapper(component));
+    return withRouter(qlWrapper(component));
   };
 }

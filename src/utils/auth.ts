@@ -19,10 +19,14 @@ export function getClientToken() {
 }
 
 export function getServerToken(context: any) {
-    let cookie = context.headers.cookie as string
-    let rk = cookie.split(';').find((c: string) => c.trim().startsWith('statecraft-key='))
-    if (rk) {
-        return rk.split('=')[1]
+    if (context.headers.cookie) {
+        let cookie = context.headers.cookie as string
+        let rk = cookie.split(';').find((c: string) => c.trim().startsWith('statecraft-key='))
+        if (rk) {
+            return rk.split('=')[1]
+        } else {
+            return undefined
+        }
     } else {
         return undefined
     }
