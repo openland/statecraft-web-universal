@@ -12,7 +12,7 @@ const buildClient = (initialState?: any, token?: string) => {
     console.warn("Build client")
     return new ApolloClient({
         networkInterface: createNetworkInterface({
-            uri: "https://statecraft-api.herokuapp.com/api/",
+            uri: "http://localhost:9000/api/",
             opts: {
                 headers: headers
             },

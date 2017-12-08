@@ -3,6 +3,7 @@ import * as Cookie from 'js-cookie';
 import Error from 'next/error';
 import * as auth0 from 'auth0-js';
 import createHistory from 'history/createBrowserHistory';
+import { withPage } from '../../components/withPage';
 
 interface AuthResult {
     expiresIn: number;
@@ -10,7 +11,7 @@ interface AuthResult {
     idToken: string;
 }
 
-export default class AuthenticationHandler extends React.Component<{}, { error: boolean }> {
+class AuthenticationHandler extends React.Component<{}, { error: boolean }> {
 
     constructor(props: {}) {
         super(props);
@@ -72,3 +73,5 @@ export default class AuthenticationHandler extends React.Component<{}, { error: 
         }
     }
 }
+
+export default withPage(AuthenticationHandler)
