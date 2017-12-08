@@ -24,7 +24,7 @@ export interface ListQueryEdge<T> {
 
 export type GraphQLListComponentProps<TResult, TExtras> = GraphQLRoutedComponentProps<ListQueryResponse<TResult, TExtras>>;
 
-export default function <TResult, TExtras = {}>(document: DocumentNode) {
+export function graphqlList<TResult, TExtras = {}>(document: DocumentNode) {
     return function (component: React.ComponentType<GraphQLListComponentProps<TResult, TExtras>>): React.ComponentType<{}> {
         let qlWrapper = graphql<ListQueryResponse<TResult, TExtras>, RouteQueryStringProps, GraphQLListComponentProps<TResult, TExtras>>(document, {
             options: (props: RouteQueryStringProps) => {

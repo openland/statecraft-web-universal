@@ -10,6 +10,8 @@
     "yarn": ">=1.0.0"
   },
   "dependencies": {
+    "@types/auth0-js": "^8.11.0",
+    "@types/js-cookie": "^2.1.0",
     "@types/next": "^2.4.6",
     "@types/prop-types": "^15.5.2",
     "@types/query-string": "^5.0.1",
@@ -17,8 +19,10 @@
     "@types/react-dom": "^16.0.3",
     "@types/react-router": "^4.0.19",
     "@types/react-router-dom": "^4.2.3",
+    "auth0-js": "^8.12.0",
     "exenv": "^1.2.2",
     "isomorphic-fetch": "^2.2.1",
+    "js-cookie": "^2.2.0",
     "next": "^4.2.0",
     "prop-types": "^15.6.0",
     "query-string": "^5.0.1",
@@ -29,13 +33,15 @@
     "react-router-dom": "^4.2.2"
   },
   "devDependencies": {
-    "concurrently": "^3.5.1"
+    "concurrently": "^3.5.1",
+    "cpx": "^1.5.0"
   },
   "scripts": {
     "prebuild": "tsc",
     "build": "yarn next build ./build/dist",
     "predev": "tsc",
-    "dev": "concurrently \"yarn build:ts:watch\" \"yarn next ./build/dist\"",
+    "assets:watch": "cpx ./src/static/**/* ./build/dist/static/ --watch",
+    "dev": "concurrently \"yarn build:ts:watch\" \"yarn next ./build/dist\" \"yarn assets:watch\"",
     "start": "yarn next start ./build/dist",
     "build:ts": "tsc",
     "build:ts:watch": "tsc --watch",

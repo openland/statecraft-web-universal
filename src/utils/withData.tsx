@@ -12,7 +12,7 @@ function getComponentDisplayName(Component: any) {
 }
 
 export const withData = (ComposedComponent: React.ComponentType<{ url?: any }>) => {
-    return class WithData extends React.Component<{ serverState?: { apollo: { data: any } } }> {
+    return class WithData extends React.Component<{ serverState: { apollo: { data: any } } }> {
         static displayName = `WithData(${getComponentDisplayName(
             ComposedComponent
         )})`
@@ -22,6 +22,7 @@ export const withData = (ComposedComponent: React.ComponentType<{ url?: any }>) 
 
         static async getInitialProps(ctx: any) {
             let serverState = { apollo: {} }
+            // console.warn(ctx.req);
 
             // Evaluate the composed component's getInitialProps()
             // let composedInitialProps = {}
@@ -32,7 +33,7 @@ export const withData = (ComposedComponent: React.ComponentType<{ url?: any }>) 
             // Run all GraphQL queries in the component tree
             // and extract the resulting data
             if (!canUseDOM) {
-                const apollo = apolloClient(serverState);
+                const apollo = apolloClient(serverState, ctx.req);
                 // Provide the `url` prop data in case a GraphQL query uses it
                 const url = { query: ctx.query, pathname: ctx.pathname }
                 try {
@@ -69,7 +70,7 @@ export const withData = (ComposedComponent: React.ComponentType<{ url?: any }>) 
 
         constructor(props: { serverState: { apollo: { data: any } } }) {
             super(props)
-            this.apollo = apolloClient(this.props.serverState ? this.props.serverState.apollo.data : undefined);
+            this.apollo = apolloClient(this.props.serverState.apollo.data);
         }
 
         render() {
