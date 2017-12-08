@@ -1,7 +1,7 @@
 import { ApolloClient, createNetworkInterface } from 'react-apollo';
 import { canUseDOM } from './environment';
 
-var cachedClient: ApolloClient | undefined = undefined
+let cachedClient: ApolloClient | undefined = undefined
 
 const buildClient = (initialState?: any, token?: string) => {
     var headers: any = {};
@@ -9,6 +9,7 @@ const buildClient = (initialState?: any, token?: string) => {
     if (token) {
         headers['authorization'] = 'Bearer ' + token;
     }
+    console.warn("Build client")
     return new ApolloClient({
         networkInterface: createNetworkInterface({
             uri: "https://statecraft-api.herokuapp.com/api/",

@@ -54,7 +54,9 @@ export const withData = (ComposedComponent: React.ComponentType) => {
 
                 // getDataFromTree does not call componentWillUnmount
                 // head side effect therefore need to be cleared manually
-                Head.rewind()
+                if (!canUseDOM) {
+                    Head.rewind()
+                }
 
                 // Extract query data from the Apollo store
                 serverState = {

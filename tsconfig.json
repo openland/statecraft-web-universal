@@ -30,7 +30,7 @@
     "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": true,
-    "allowSyntheticDefaultImports": false
+    "allowSyntheticDefaultImports": true
   },
   "exclude": [
     "node_modules",
