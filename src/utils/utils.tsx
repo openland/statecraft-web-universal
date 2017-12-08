@@ -9,3 +9,7 @@ export function prepareParams(fields: string[], source: any): { [key: string]: a
     }
     return res;
 }
+
+export function getComponentDisplayName(Component: any) {
+    return Component.displayName || Component.name || 'FunctionalStateless';
+}

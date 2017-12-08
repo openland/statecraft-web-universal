@@ -7,34 +7,42 @@ import { canUseDOM } from './environment';
 import { apolloClient } from './apolloClient';
 import { getToken } from './auth';
 import { isPageChanged } from './routing';
-import 'isomorphic-fetch';
 import { NormalizedCacheObject } from 'apollo-cache-inmemory';
-
-function getComponentDisplayName(Component: any) {
-    return Component.displayName || Component.name || 'Unknown';
-}
+import { HostNameProvider } from './HostNameProvider';
+import { getComponentDisplayName } from './utils';
 
 export const withData = (ComposedComponent: React.ComponentType) => {
-    return class WithData extends React.Component<{ serverState: { apollo: { data: any, token?: string } } }> {
+    return class WithData extends React.Component<{ serverState: { apollo: { data: any, token?: string } }, host: string, protocol: string }> {
 
         static displayName = `WithData(${getComponentDisplayName(
             ComposedComponent
         )})`;
         static propTypes = {
-            serverState: PropTypes.object.isRequired
+            serverState: PropTypes.object.isRequired,
+            host: PropTypes.string.isRequired,
+            protocol: PropTypes.string.isRequired
         };
         private apollo: ApolloClient<NormalizedCacheObject>;
 
         static async getInitialProps(ctx: any) {
             let token = getToken(ctx.req);
             let serverState = { apollo: {} };
+            let host: string;
+            let protocol: string;
+            if (ctx.req) {
+                host = ctx.req.get('host');
+                protocol = ctx.req.protocol;
+            } else {
+                host = window.location.host;
+                protocol = window.location.protocol.replace(':', '');
+            }
             // console.warn(ctx.req);
 
             // Evaluate the composed component's getInitialProps()
-            // let composedInitialProps = {}
-            // if ((ComposedComponent as any).getInitialProps) {
-            //     composedInitialProps = await ComposedComponent.getInitialProps(ctx)
-            // }
+            let composedInitialProps = {};
+            if ((ComposedComponent as any).getInitialProps) {
+                composedInitialProps = await (ComposedComponent as any).getInitialProps(ctx);
+            }
 
             // Run all GraphQL queries in the component tree
             // and extract the resulting data
@@ -46,7 +54,9 @@ export const withData = (ComposedComponent: React.ComponentType) => {
                     // Run all GraphQL queries
                     await getDataFromTree(
                         <ApolloProvider client={apollo}>
-                            <ComposedComponent />
+                            <HostNameProvider hostName={host} protocol={protocol}>
+                                <ComposedComponent />
+                            </HostNameProvider>
                         </ApolloProvider>
                         ,
                         { router: { query: ctx.query, pathname: ctx.pathname, asPath: ctx.asPath } });
@@ -71,7 +81,6 @@ export const withData = (ComposedComponent: React.ComponentType) => {
                     }
                 };
             } else if (isPageChanged()) {
-                console.warn(ctx);
                 const apollo = apolloClient(serverState, token);
                 // Provide the `url` prop data in case a GraphQL query uses it
                 // const url = { query: ctx.query, pathname: ctx.pathname }
@@ -79,7 +88,9 @@ export const withData = (ComposedComponent: React.ComponentType) => {
                     // Run all GraphQL queries
                     await getDataFromTree(
                         <ApolloProvider client={apollo}>
-                            <ComposedComponent />
+                            <HostNameProvider hostName={host} protocol={protocol}>
+                                <ComposedComponent />
+                            </HostNameProvider>
                         </ApolloProvider>
                         ,
                         { router: { query: ctx.query, pathname: ctx.pathname, asPath: ctx.asPath } });
@@ -97,11 +108,14 @@ export const withData = (ComposedComponent: React.ComponentType) => {
             }
 
             return {
-                serverState
+                serverState,
+                ...composedInitialProps,
+                host,
+                protocol
             };
         }
 
-        constructor(props: { serverState: { apollo: { data: any, token?: string } } }) {
+        constructor(props: { serverState: { apollo: { data: any, token?: string } }, host: string, protocol: string }) {
             super(props);
             this.apollo = apolloClient(this.props.serverState.apollo.data, this.props.serverState.apollo.token);
         }
@@ -109,7 +123,9 @@ export const withData = (ComposedComponent: React.ComponentType) => {
         render() {
             return (
                 <ApolloProvider client={this.apollo}>
-                    <ComposedComponent {...this.props} />
+                    <HostNameProvider hostName={this.props.host} protocol={this.props.protocol}>
+                        <ComposedComponent {...this.props} />
+                    </HostNameProvider>
                 </ApolloProvider>
             );
         }

@@ -1,7 +1,7 @@
 import { graphql } from 'react-apollo';
 import { DocumentNode } from 'graphql';
 import { GraphQLRoutedComponentProps, NotNullableDataProps } from './graphql';
-import { withRouter, SingletonRouter } from 'next/router';
+import { withRouter, RouterState } from './withRouter';
 import { prepareParams } from './utils';
 
 export interface ListQueryResponse<T, E> {
@@ -27,8 +27,8 @@ export type GraphQLListComponentProps<TResult, TExtras> = GraphQLRoutedComponent
 
 export function graphqlList<TResult, TExtras = {}>(document: DocumentNode, params: string[] = []) {
     return function (component: React.ComponentType<GraphQLListComponentProps<TResult, TExtras>>): React.ComponentType<{}> {
-        let qlWrapper = graphql<ListQueryResponse<TResult, TExtras>, { router: SingletonRouter }, GraphQLListComponentProps<TResult, TExtras>>(document, {
-            options: (props: { router: SingletonRouter }) => {
+        let qlWrapper = graphql<ListQueryResponse<TResult, TExtras>, { router: RouterState }, GraphQLListComponentProps<TResult, TExtras>>(document, {
+            options: (props: { router: RouterState }) => {
                 return {
                     variables: {
                         ...prepareParams(params, props.router.query)

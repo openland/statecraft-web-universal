@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { withUserInfo } from './UserInfo';
 import { Link } from './Link';
-import { withRouter } from 'next/router';
+import { withRouter } from '../utils/withRouter';
 
 export const Header = withUserInfo((props) => {
     return (
@@ -65,8 +65,8 @@ export function HeaderLargeTitle(props: { title: string }) {
 
 export const HeaderLargeSocial = withRouter((props) => {
 
-    var shareText: string = 'San Francisco Housing Forecast 2017-18 ' + /*window.location.href*/ + ' #housing #sf';
-    var shareUrl: string = ''; // window.location.href;
+    var shareText: string = 'San Francisco Housing Forecast 2017-18 ' + props.router.href + ' #housing #sf';
+    var shareUrl: string = props.router.href;
 
     return (
         <div className="x-intro--tools">
