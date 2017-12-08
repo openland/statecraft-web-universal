@@ -48,9 +48,10 @@
     "tslint-react": "^3.2.0"
   },
   "scripts": {
-    "prebuild": "./node_modules/typescript/bin/tsc",
+    "prebuild": "./node_modules/typescript/bin/tsc & yarn assets",
     "build": "yarn next build ./build/dist",
     "predev": "./node_modules/typescript/bin/tsc",
+    "assets": "cpx \"./src/static/**/*\" ./build/dist/static/",
     "assets:watch": "cpx \"./src/static/**/*\" ./build/dist/static/ --watch",
     "dev": "concurrently \"yarn build:ts:watch\" \"yarn next ./build/dist\" \"yarn assets:watch\"",
     "start:prod": "yarn next start ./build/dist",
