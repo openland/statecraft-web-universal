@@ -1,11 +1,9 @@
 import { ApolloClient, createNetworkInterface } from 'react-apollo';
 import { canUseDOM } from './environment';
-import { getClientToken, getServerToken } from './auth';
 
 var cachedClient: ApolloClient | undefined = undefined
 
-const buildClient = (initialState?: any, ctx?: any) => {
-    let token = canUseDOM ? getClientToken() : (ctx ? getServerToken(ctx) : undefined);
+const buildClient = (initialState?: any, token?: string) => {
     var headers: any = {};
     headers['x-statecraft-domain'] = "sf";
     if (token) {
@@ -25,13 +23,13 @@ const buildClient = (initialState?: any, ctx?: any) => {
     })
 }
 
-export const apolloClient = (initialState?: any, ctx?: any) => {
+export const apolloClient = (initialState?: any, token?: string) => {
     if (canUseDOM) {
         if (!cachedClient) {
-            cachedClient = buildClient(initialState, ctx)
+            cachedClient = buildClient(initialState, token)
         }
         return cachedClient!!
     } else {
-        return buildClient(initialState, ctx)
+        return buildClient(initialState, token)
     }
 };

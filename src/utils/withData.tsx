@@ -4,6 +4,7 @@ import { ApolloProvider, ApolloClient, getDataFromTree } from 'react-apollo'
 import Head from 'next/head'
 import { canUseDOM } from './environment';
 import { apolloClient } from './apolloClient';
+import { getToken } from './auth';
 
 import 'isomorphic-fetch';
 
@@ -12,7 +13,7 @@ function getComponentDisplayName(Component: any) {
 }
 
 export const withData = (ComposedComponent: React.ComponentType<{ url?: any }>) => {
-    return class WithData extends React.Component<{ serverState: { apollo: { data: any } } }> {
+    return class WithData extends React.Component<{ serverState: { apollo: { data: any, token?: string } } }> {
         static displayName = `WithData(${getComponentDisplayName(
             ComposedComponent
         )})`
@@ -21,6 +22,7 @@ export const withData = (ComposedComponent: React.ComponentType<{ url?: any }>) 
         }
 
         static async getInitialProps(ctx: any) {
+            let token = getToken(ctx.req)
             let serverState = { apollo: {} }
             // console.warn(ctx.req);
 
@@ -33,7 +35,7 @@ export const withData = (ComposedComponent: React.ComponentType<{ url?: any }>) 
             // Run all GraphQL queries in the component tree
             // and extract the resulting data
             if (!canUseDOM) {
-                const apollo = apolloClient(serverState, ctx.req);
+                const apollo = apolloClient(serverState, token);
                 // Provide the `url` prop data in case a GraphQL query uses it
                 const url = { query: ctx.query, pathname: ctx.pathname }
                 try {
@@ -56,7 +58,14 @@ export const withData = (ComposedComponent: React.ComponentType<{ url?: any }>) 
                 // Extract query data from the Apollo store
                 serverState = {
                     apollo: {
-                        data: apollo.getInitialState()
+                        data: apollo.getInitialState(),
+                        token: token
+                    }
+                }
+            } else {
+                serverState = {
+                    apollo: {
+                        token: token
                     }
                 }
             }
@@ -68,9 +77,9 @@ export const withData = (ComposedComponent: React.ComponentType<{ url?: any }>) 
 
         apollo: ApolloClient
 
-        constructor(props: { serverState: { apollo: { data: any } } }) {
+        constructor(props: { serverState: { apollo: { data: any, token?: string } } }) {
             super(props)
-            this.apollo = apolloClient(this.props.serverState.apollo.data);
+            this.apollo = apolloClient(this.props.serverState.apollo.data, this.props.serverState.apollo.token);
         }
 
         render() {

@@ -1,17 +1,27 @@
 import * as React from 'react';
 import { AuthenticationController } from '../../utils/auth';
-export default class AuthenticationHandler extends React.Component<{}, {}> {
+import Error from 'next/error';
+
+export default class AuthenticationHandler extends React.Component<{}, { error: boolean }> {
+
+    constructor(props: {}) {
+        super(props);
+        this.state = { error: false };
+    }
 
     componentDidMount() {
         new AuthenticationController().completeAuth().then((v) => {
-            console.warn(v)
+            // Do nothing
         }).catch((e) => {
-            console.warn(e)
+            this.setState({ error: true });
         })
-        // console.warn("did mount")
     }
 
     render() {
-        return <div />;
+        if (this.state.error) {
+            return <Error statusCode={500} />;
+        } else {
+            return <div />;
+        }
     }
 }

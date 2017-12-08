@@ -10,17 +10,39 @@ export interface AuthResult {
     idToken: string;
 }
 
+//
+// Token Loading
+//
+
 export function getClientToken() {
     return Cookie.get("statecraft-key");
 }
 
 export function getServerToken(context: any) {
-    return context.headers.cookie.split(';').find((c: string) => c.trim().startsWith('statecraft-key='));
+    let cookie = context.headers.cookie as string
+    let rk = cookie.split(';').find((c: string) => c.trim().startsWith('statecraft-key='))
+    if (rk) {
+        return rk.split('=')[1]
+    } else {
+        return undefined
+    }
 }
+
+export function getToken(context: any) {
+    if (canUseDOM) {
+        return getClientToken()
+    } else {
+        return getServerToken(context)
+    }
+}
+
+//
+// Client API
+//
 
 export class AuthenticationController {
     private auth: auth0.WebAuth
-    private history?: History
+    private history: History
 
     constructor(context?: any) {
         if (!canUseDOM) {
@@ -53,27 +75,23 @@ export class AuthenticationController {
             ]
         });
         if (uploaded.ok) {
-            Cookie.set("statecraft-key", auth.idToken, { expires: auth.expiresIn })
+            Cookie.set("statecraft-key", auth.idToken, { expires: auth.expiresIn });
+            this.history.replace('/');
         }
-        this.history!!.replace('/');
     }
 
     logOut() {
         Cookie.remove("statecraft-key")
-        this.history!!.replace('/');
+        this.history.replace('/');
     }
 
     private async retreiveAuthentication() {
         return new Promise<AuthResult>((resolve, reject) => {
-            this.auth.parseHash((err, authResult: { expiresIn: number, accessToken: string, idToken: string }) => {
+            this.auth.parseHash((err, authResult: AuthResult) => {
                 if (err != null) {
                     reject(err);
                 } else {
-                    resolve({
-                        expiresIn: authResult.expiresIn,
-                        accessToken: authResult.accessToken,
-                        idToken: authResult.idToken
-                    });
+                    resolve(authResult);
                 }
             });
         });
