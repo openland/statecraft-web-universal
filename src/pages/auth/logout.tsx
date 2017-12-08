@@ -10,7 +10,7 @@ class LogoutHandler extends React.Component<{}, {}> {
     }
 
     componentDidMount() {
-        Cookie.remove("statecraft-key");
+        Cookie.remove('statecraft-key');
         createHistory({
             forceRefresh: true
         }).replace('/');
@@ -21,4 +21,4 @@ class LogoutHandler extends React.Component<{}, {}> {
     }
 }
 
-export default withPage(LogoutHandler)
+export default withPage(LogoutHandler);

@@ -14,11 +14,12 @@ import * as NProgress from 'nprogress';
 //
 
 Router.onRouteChangeStart = (url) => {
-    console.log(`Loading: ${url}`)
-    NProgress.start()
-}
-Router.onRouteChangeComplete = () => NProgress.done()
-Router.onRouteChangeError = () => NProgress.done()
+    // console.log(`Loading: ${url}`);
+    NProgress.start();
+};
+
+Router.onRouteChangeComplete = () => NProgress.done();
+Router.onRouteChangeError = () => NProgress.done();
 
 //
 // Root Loader. We shouldn't render anything untill page is loaded since we have global progress indicator.

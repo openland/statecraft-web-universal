@@ -10,7 +10,7 @@ module.exports = {
                 openAnalyzer: true
             }))
         }
-
+        
         return config
     }
 }

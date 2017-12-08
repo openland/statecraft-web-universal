@@ -1,29 +1,33 @@
-import * as React from 'react'
+import * as React from 'react';
 import * as PropTypes from 'prop-types';
-import { ApolloProvider, ApolloClient, getDataFromTree } from 'react-apollo'
-import Head from 'next/head'
+import { ApolloProvider, getDataFromTree } from 'react-apollo';
+import { ApolloClient } from 'apollo-client';
+import Head from 'next/head';
 import { canUseDOM } from './environment';
 import { apolloClient } from './apolloClient';
 import { getToken } from './auth';
 
 import 'isomorphic-fetch';
+import { NormalizedCacheObject } from 'apollo-cache-inmemory';
 
 function getComponentDisplayName(Component: any) {
-    return Component.displayName || Component.name || 'Unknown'
+    return Component.displayName || Component.name || 'Unknown';
 }
 
 export const withData = (ComposedComponent: React.ComponentType) => {
     return class WithData extends React.Component<{ serverState: { apollo: { data: any, token?: string } } }> {
+
         static displayName = `WithData(${getComponentDisplayName(
             ComposedComponent
-        )})`
+        )})`;
         static propTypes = {
             serverState: PropTypes.object.isRequired
-        }
+        };
+        private apollo: ApolloClient<NormalizedCacheObject>;
 
         static async getInitialProps(ctx: any) {
-            let token = getToken(ctx.req)
-            let serverState = { apollo: {} }
+            let token = getToken(ctx.req);
+            let serverState = { apollo: {} };
             // console.warn(ctx.req);
 
             // Evaluate the composed component's getInitialProps()
@@ -44,9 +48,10 @@ export const withData = (ComposedComponent: React.ComponentType) => {
                         <ApolloProvider client={apollo}>
                             <ComposedComponent />
                         </ApolloProvider>
-                        , { router: { query: ctx.query, pathname: ctx.pathname, asPath: ctx.asPath } })
+                        ,
+                        { router: { query: ctx.query, pathname: ctx.pathname, asPath: ctx.asPath } });
                 } catch (error) {
-                    console.warn(error)
+                    console.warn(error);
                     // Prevent Apollo Client GraphQL errors from crashing SSR.
                     // Handle them in components via the data.error prop:
                     // http://dev.apollodata.com/react/api-queries.html#graphql-query-data-error
@@ -55,33 +60,31 @@ export const withData = (ComposedComponent: React.ComponentType) => {
                 // getDataFromTree does not call componentWillUnmount
                 // head side effect therefore need to be cleared manually
                 if (!canUseDOM) {
-                    Head.rewind()
+                    Head.rewind();
                 }
 
                 // Extract query data from the Apollo store
                 serverState = {
                     apollo: {
-                        data: apollo.getInitialState(),
+                        data: apollo.extract(),
                         token: token
                     }
-                }
+                };
             } else {
                 serverState = {
                     apollo: {
                         token: token
                     }
-                }
+                };
             }
 
             return {
                 serverState
-            }
+            };
         }
 
-        apollo: ApolloClient
-
         constructor(props: { serverState: { apollo: { data: any, token?: string } } }) {
-            super(props)
+            super(props);
             this.apollo = apolloClient(this.props.serverState.apollo.data, this.props.serverState.apollo.token);
         }
 
@@ -90,7 +93,7 @@ export const withData = (ComposedComponent: React.ComponentType) => {
                 <ApolloProvider client={this.apollo}>
                     <ComposedComponent {...this.props} />
                 </ApolloProvider>
-            )
+            );
         }
-    }
-}
+    };
+};

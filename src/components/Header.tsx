@@ -16,16 +16,15 @@ export const Header = withUserInfo((props) => {
                 </div>
                 <ul className="x-top--nav">
                     {props.user && (<li className="x-top--item"><span><img src={props.user.picture} alt="" />{props.user.firstName} {' '} {props.user.lastName}</span></li>)}
-                    {props.user && (<li className="x-top--item is-join"><button onClick={e => { props.doLogout() }}>Sign Out</button></li>)}
+                    {props.user && (<li className="x-top--item is-join"><button onClick={e => { props.doLogout(); }}>Sign Out</button></li>)}
 
-                    {!props.user && (<li className="x-top--item"><button onClick={e => { props.doLogin() }}>Sign In</button></li>)}
+                    {!props.user && (<li className="x-top--item"><button onClick={e => { props.doLogin(); }}>Sign In</button></li>)}
                     {!props.user && (<li className="x-top--item is-join"><a target="_blank" href="https://goo.gl/forms/YX8LSpH6jWLzbEj02">Join</a></li>)}
                 </ul>
             </div>
         </div>
     );
 });
-
 
 export const HeaderLarge = withUserInfo((props) => {
     return (
@@ -40,10 +39,10 @@ export const HeaderLarge = withUserInfo((props) => {
                             <li className="x-header--item"><span><img src={props.user.picture} alt="" />{props.user.firstName} {props.user.lastName}</span></li>
                         }
                         {props.user &&
-                            <li className="x-header--item is-join"><button onClick={e => { props.doLogout() }}>Sign Out</button></li>
+                            <li className="x-header--item is-join"><button onClick={e => { props.doLogout(); }}>Sign Out</button></li>
                         }
                         {!props.user &&
-                            <li className="x-header--item"><button onClick={e => { props.doLogin() }}>Sign In</button></li>
+                            <li className="x-header--item"><button onClick={e => { props.doLogin(); }}>Sign In</button></li>
                         }
                         {!props.user &&
                             (<li className="x-header--item is-join"><a target="_blank" href="https://goo.gl/forms/YX8LSpH6jWLzbEj02">Join</a></li>)
@@ -67,7 +66,7 @@ export function HeaderLargeTitle(props: { title: string }) {
 export const HeaderLargeSocial = withRouter((props) => {
 
     var shareText: string = 'San Francisco Housing Forecast 2017-18 ' + /*window.location.href*/ + ' #housing #sf';
-    var shareUrl: string = "" //window.location.href
+    var shareUrl: string = ''; // window.location.href;
 
     return (
         <div className="x-intro--tools">
@@ -84,4 +83,4 @@ export const HeaderLargeSocial = withRouter((props) => {
             </div>
         </div>
     );
-})
+});

@@ -23,7 +23,7 @@ class AuthenticationHandler extends React.Component<{}, { error: boolean }> {
             // Do nothing
         }).catch((e) => {
             this.setState({ error: true });
-        })
+        });
     }
 
     async completeAuth() {
@@ -36,12 +36,20 @@ class AuthenticationHandler extends React.Component<{}, { error: boolean }> {
             ]
         });
         if (uploaded.ok) {
-            Cookie.set("statecraft-key", auth.idToken, { expires: auth.expiresIn });
+            Cookie.set('statecraft-key', auth.idToken, { expires: auth.expiresIn });
             createHistory({
                 forceRefresh: true
             }).replace('/');
         } else {
-            throw "Error"
+            throw 'Error';
+        }
+    }
+
+    render() {
+        if (this.state.error) {
+            return <Error statusCode={500} />;
+        } else {
+            return <div />;
         }
     }
 
@@ -64,14 +72,6 @@ class AuthenticationHandler extends React.Component<{}, { error: boolean }> {
             });
         });
     }
-
-    render() {
-        if (this.state.error) {
-            return <Error statusCode={500} />;
-        } else {
-            return <div />;
-        }
-    }
 }
 
-export default withPage(AuthenticationHandler)
+export default withPage(AuthenticationHandler);

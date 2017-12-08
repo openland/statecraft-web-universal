@@ -30,23 +30,23 @@ export class UserInfoProvider extends React.Component<{ user?: User, account: Ac
         return {
             user: this.props.user,
             account: this.props.account,
-            isLoggedIn: this.props.user != undefined,
+            isLoggedIn: this.props.user !== undefined,
             doLogin: () => {
-                this.props.router.push("/auth/login")
+                this.props.router.push('/auth/login');
             },
             doLogout: () => {
-                this.props.router.push("/auth/logout")
+                this.props.router.push('/auth/logout');
             }
         };
     }
 }
 
 interface UserInfoComponentProps {
-    user?: User
-    account: Account
-    isLoggedIn: boolean
-    doLogin: () => void
-    doLogout: () => void
+    user?: User;
+    account: Account;
+    isLoggedIn: boolean;
+    doLogin: () => void;
+    doLogout: () => void;
 }
 
 class UserInfoReceiver extends React.Component<{ render: React.ComponentType<UserInfoComponentProps> }> {
@@ -65,14 +65,16 @@ class UserInfoReceiver extends React.Component<{ render: React.ComponentType<Use
         var doLogin = this.context.doLogin as () => void;
         var doLogout = this.context.doLogout as () => void;
         var Wrapped = this.props.render;
-        return <Wrapped
-            user={user}
-            account={account}
-            isLoggedIn={isLoggedIn}
-            doLogin={doLogin}
-            doLogout={doLogout}
-            {...this.props}
-        />;
+        return (
+            <Wrapped
+                user={user}
+                account={account}
+                isLoggedIn={isLoggedIn}
+                doLogin={doLogin}
+                doLogout={doLogout}
+                {...this.props}
+            />
+        );
     }
 }
 

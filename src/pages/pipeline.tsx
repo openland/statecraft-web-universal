@@ -39,7 +39,6 @@ export const PipelineItems = withInfiniteList<BuildingProject>(item => {
     );
 });
 
-
 const Index = withBuildingProjectsQuery((props) => {
     return (
         <React.Fragment>

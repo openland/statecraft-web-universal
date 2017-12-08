@@ -6,27 +6,27 @@ import * as Cookie from 'js-cookie';
 //
 
 export function getClientToken() {
-    return Cookie.get("statecraft-key");
+    return Cookie.get('statecraft-key');
 }
 
 export function getServerToken(context: any) {
     if (context.headers.cookie) {
-        let cookie = context.headers.cookie as string
-        let rk = cookie.split(';').find((c: string) => c.trim().startsWith('statecraft-key='))
+        let cookie = context.headers.cookie as string;
+        let rk = cookie.split(';').find((c: string) => c.trim().startsWith('statecraft-key='));
         if (rk) {
-            return rk.split('=')[1]
+            return rk.split('=')[1];
         } else {
-            return undefined
+            return undefined;
         }
     } else {
-        return undefined
+        return undefined;
     }
 }
 
 export function getToken(context: any) {
     if (canUseDOM) {
-        return getClientToken()
+        return getClientToken();
     } else {
-        return getServerToken(context)
+        return getServerToken(context);
     }
 }

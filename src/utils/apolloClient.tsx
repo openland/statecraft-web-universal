@@ -1,37 +1,38 @@
-import { ApolloClient, createNetworkInterface } from 'react-apollo';
+import { ApolloClient } from 'apollo-client';
+import { HttpLink } from 'apollo-link-http';
+import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
 import { canUseDOM } from './environment';
 
-let cachedClient: ApolloClient | undefined = undefined
+let cachedClient: ApolloClient<NormalizedCacheObject> | undefined = undefined;
 
 const buildClient = (initialState?: any, token?: string) => {
     var headers: any = {};
-    headers['x-statecraft-domain'] = "sf";
-    if (token) {
-        headers['authorization'] = 'Bearer ' + token;
+    headers['x-statecraft-domain'] = 'sf';
+    // if (token) {
+    //     headers.authorization = 'Bearer ' + token;
+    // }
+    console.warn('Build client');
+    var cache = new InMemoryCache();
+    if (initialState) {
+        cache = cache.restore(initialState);
     }
-    console.warn("Build client")
     return new ApolloClient({
-        networkInterface: createNetworkInterface({
-            //uri: "http://localhost:9000/api/",
-            uri: "https://statecraft-api.herokuapp.com/api/",
-            opts: {
-                headers: headers
-            },
+        link: new HttpLink({
+            uri: 'https://statecraft-api.herokuapp.com/api/',
+            headers: headers
         }),
-        initialState: {
-            apollo: initialState || {}
-        },
+        cache: cache,
         ssrMode: canUseDOM
-    })
-}
+    });
+};
 
 export const apolloClient = (initialState?: any, token?: string) => {
     if (canUseDOM) {
         if (!cachedClient) {
-            cachedClient = buildClient(initialState, token)
+            cachedClient = buildClient(initialState, token);
         }
-        return cachedClient!!
+        return cachedClient!!;
     } else {
-        return buildClient(initialState, token)
+        return buildClient(initialState, token);
     }
 };

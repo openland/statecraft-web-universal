@@ -26,4 +26,4 @@ class LoginStarter extends React.Component<{}, { error: boolean }> {
     }
 }
 
-export default withPage(LoginStarter)
+export default withPage(LoginStarter);

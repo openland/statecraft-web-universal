@@ -15,6 +15,6 @@ export default class StateDocument extends Document {
                     <NextScript />
                 </body>
             </html>
-        )
+        );
     }
 }

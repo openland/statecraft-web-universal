@@ -56,7 +56,7 @@ export const DataListRadioItem = withRouter<{ title: string, itemKey?: string, r
     var path = props.router.pathname;
     var checked = false;
     if (props.radioKey) {
-        let s = JSON.parse(JSON.stringify(props.router.query!!))
+        let s = JSON.parse(JSON.stringify(props.router.query!!));
         if (props.itemKey) {
             checked = s[props.radioKey] === props.itemKey;
             s[props.radioKey] = props.itemKey;
@@ -76,9 +76,8 @@ export const DataListRadioItem = withRouter<{ title: string, itemKey?: string, r
     );
 });
 
-
 export const DataListSearch = withRouter<{ searchKey: string }>(props => {
-    let s = JSON.parse(JSON.stringify(props.router.query!!))
+    let s = JSON.parse(JSON.stringify(props.router.query!!));
     var value: string = '';
     if (s[props.searchKey]) {
         value = s[props.searchKey];
@@ -92,7 +91,7 @@ export const DataListSearch = withRouter<{ searchKey: string }>(props => {
                     placeholder="Search"
                     value={value}
                     onChange={e => {
-                        let s2 = JSON.parse(JSON.stringify(props.router.query!!))
+                        let s2 = JSON.parse(JSON.stringify(props.router.query!!));
                         if (e.target.value === '') {
                             delete s2[props.searchKey];
                         } else {
@@ -100,9 +99,9 @@ export const DataListSearch = withRouter<{ searchKey: string }>(props => {
                         }
                         let q = qs.stringify(s2);
                         if (q !== '') {
-                            props.router.replace(props.router.pathname + '?' + q)
+                            props.router.replace(props.router.pathname + '?' + q);
                         } else {
-                            props.router.replace(props.router.pathname)
+                            props.router.replace(props.router.pathname);
                         }
                     }}
                 />

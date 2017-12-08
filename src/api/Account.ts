@@ -1,4 +1,4 @@
-import { gql } from 'react-apollo';
+import gql from 'graphql-tag';
 import { graphqlRouted } from '../utils/graphqlRouted';
 import { User } from './User';
 
