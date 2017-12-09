@@ -6,9 +6,9 @@ import 'isomorphic-fetch';
 
 let cachedClient: ApolloClient<NormalizedCacheObject> | undefined = undefined;
 
-const buildClient = (initialState?: any, token?: string) => {
+const buildClient = (domain: string, initialState?: any, token?: string) => {
     var headers: any = {};
-    headers['x-statecraft-domain'] = 'sf';
+    headers['x-statecraft-domain'] = domain;
     if (token) {
         headers.authorization = 'Bearer ' + token;
     }
@@ -27,13 +27,13 @@ const buildClient = (initialState?: any, token?: string) => {
     });
 };
 
-export const apolloClient = (initialState?: any, token?: string) => {
+export const apolloClient = (domain: string, initialState?: any, token?: string) => {
     if (canUseDOM) {
         if (!cachedClient) {
-            cachedClient = buildClient(initialState, token);
+            cachedClient = buildClient(domain, initialState, token);
         }
         return cachedClient!!;
     } else {
-        return buildClient(initialState, token);
+        return buildClient(domain, initialState, token);
     }
 };
