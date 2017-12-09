@@ -2,9 +2,9 @@ import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import { Account } from '../api/Account';
 import { User } from '../api/User';
-import { withRouter, SingletonRouter } from 'next/router';
+import { withRouter, RouterState } from '../utils/withRouter';
 
-export class UserInfoProvider extends React.Component<{ user?: User, account: Account, router: SingletonRouter }> implements React.ChildContextProvider<{}> {
+export class UserInfoProvider extends React.Component<{ user?: User, account: Account, router: RouterState }> implements React.ChildContextProvider<{}> {
     static childContextTypes = {
         user: PropTypes.object,
         account: PropTypes.object.isRequired,

@@ -11,6 +11,8 @@ export interface RouterState {
     readonly hostName: string;
     readonly protocol: string;
     readonly href: string;
+
+    push: (path: string) => void;
 }
 
 export function withRouter<P = {}>(ComposedComponent: React.ComponentType<P & { router: RouterState }>) {
@@ -39,7 +41,10 @@ export function withRouter<P = {}>(ComposedComponent: React.ComponentType<P & { 
                 query: nRouter.query,
                 hostName: hostName,
                 protocol: protocol,
-                href: href
+                href: href,
+                push: (path) => {
+                    nRouter.push(path);
+                }
             };
             return (
                 <ComposedComponent
