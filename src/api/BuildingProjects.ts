@@ -39,7 +39,7 @@ export interface BuildingProject {
     existingAffordableUnits?: number;
     proposedAffordableUnits?: number;
 
-    preview?: string;
+    preview?: { url: string; retina: string; };
     extrasDeveloper?: string;
     extrasGeneralConstructor?: string;
     extrasYearEnd?: string;
@@ -73,7 +73,10 @@ const BuildingProjectsQuery = gql`
                 existingAffordableUnits
                 proposedAffordableUnits
                 
-                preview: picture(width: 224, height: 164)
+                preview: picture(width: 224, height: 164) {
+                    url
+                    retina
+                }
                 extrasDeveloper
                 extrasGeneralConstructor
                 extrasYearEnd
