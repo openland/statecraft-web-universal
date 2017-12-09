@@ -85,7 +85,7 @@ export class HeaderLarge extends React.Component<{ children: any }, { isShown: b
             <div className="x-intro">
                 <div className="x-container">
                     <div className={'x-header' + (this.state.isShown ? ' is-shown' : '')}>
-                        <a className="x-header--logo" href="https://statecraft.one/"><img src="/img/logotype.svg" alt="" /></a>
+                        <a className="x-header--logo" href="https://statecraft.one/"><img src="/static/img/logotype.svg" alt="" /></a>
                         <a className="x-header--open visible-xs" href="#" onClick={(e) => { e.preventDefault(); this.setState({ isShown: !this.state.isShown }); }}>{}</a>
 
                         <div className="x-header--nav hidden-xs">
