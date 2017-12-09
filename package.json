@@ -38,6 +38,8 @@
     "graphql-tag": "^2.6.0",
     "isomorphic-fetch": "^2.2.1",
     "js-cookie": "^2.2.0",
+    "less": "^2.7.3",
+    "less-watch-compiler": "^1.10.0",
     "markdown-it": "^8.4.0",
     "marked": "^0.3.7",
     "next": "^4.2.0",
@@ -55,19 +57,29 @@
     "webpack-bundle-analyzer": "^2.9.1"
   },
   "scripts": {
-    "prebuild": "NODE_ENV=production ./node_modules/typescript/bin/tsc && yarn assets",
-    "build": "NODE_ENV=production yarn next build ./build/dist",
-    "predev": "./node_modules/typescript/bin/tsc",
+    
+    "sources": "./node_modules/typescript/bin/tsc",
+    "sources:watch": "./node_modules/typescript/bin/tsc --watch",
+    "less": "./node_modules/less/bin/lessc ./src/less/style.less ./build/dist/static/css/style.css",
+    "less:watch": "yarn less-watch-compiler src/less/ build/dist/static/css/ style.less",
     "assets": "yarn cpx \"./src/static/**/*\" ./build/dist/static/",
     "assets:watch": "yarn cpx \"./src/static/**/*\" ./build/dist/static/ --watch",
-    "dev": "concurrently \"yarn build:ts:watch\" \"node ./build/dist/server.js\" \"yarn assets:watch\"",
+
+    "bundle": "yarn sources && yarn assets && yarn less",
+    "bundle:watch": "concurrently \"yarn sources:watch\" \"yarn assets:watch\" \"yarn less:watch\"",
+
+    "prebuild": "NODE_ENV=production yarn bundle",
+    "build": "NODE_ENV=production yarn next build ./build/dist",
+
+    "server": "node ./build/dist/server.js",
+
+    "predev": "yarn bundle",
+    "dev": "concurrently \"yarn sources:watch\" \"yarn assets:watch\" \"yarn less:watch\" \"yarn server\"",
     "dev:staging": "API_ENDPOINT=\"https://statecraft-api-staging.herokuapp.com\" yarn dev",
     "dev:production": "API_ENDPOINT=\"https://statecraft-api.herokuapp.com\" yarn dev",
-    "start": "NODE_ENV=production node ./build/dist/server.js",
-    "build:ts": "./node_modules/typescript/bin/tsc",
-    "build:ts:watch": "./node_modules/typescript/bin/tsc --watch",
-    "export": "yarn next export ./build/dist",
-    "analyze": "cross-env ANALYZE=1 next build ./build/dist",
+    "analyze": "yarn build && cross-env ANALYZE=1 next build ./build/dist",
+    
+    "start": "NODE_ENV=production yarn server",
     "heroku-postbuild": "yarn build"
   }
 }
