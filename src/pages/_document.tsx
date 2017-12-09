@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Document, { Head, Main, NextScript } from 'next/document';
+import '../utils/analytics';
 
 export default class StateDocument extends Document {
     render() {
