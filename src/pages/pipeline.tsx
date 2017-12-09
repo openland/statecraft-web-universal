@@ -8,6 +8,7 @@ import {
 } from '../components/DataList';
 import { withInfiniteList } from '../components/withInfiniteList';
 import { DataListCard, DataListCardItem } from '../components/DataListCard';
+import { DataListInvite } from '../components/DataListInvite';
 
 export const PipelineItems = withInfiniteList<BuildingProject>(item => {
     var units: number | undefined = undefined;
@@ -56,8 +57,9 @@ const Index = withBuildingProjectsQuery((props) => {
                         <DataListRadioItem title="All" />
                         <DataListRadioItem title="10+ units" itemKey="10" />
                     </DataListRadio>
+                    <DataListInvite />
                 </DataListFilters>
-                <DataListContent title="Pipeline" newUnits={props.data.items ? props.data.items.stats.newUnits : 0} newUnitsVerified={props.data.items ? props.data.items.stats.newUnitsVerified : 0}>
+                <DataListContent title="Pipeline" totalProjects={props.data.items ? props.data.items.stats.totalProjects : 0} totalProjectsVerified={props.data.items ? props.data.items.stats.totalProjectsVerified : 0} newUnits={props.data.items ? props.data.items.stats.newUnits : 0} newUnitsVerified={props.data.items ? props.data.items.stats.newUnitsVerified : 0}>
                     <PipelineItems data={props.data} />
                 </DataListContent>
             </DataList>

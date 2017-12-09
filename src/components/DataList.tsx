@@ -15,22 +15,46 @@ export function DataList(props: { children?: any }) {
     );
 }
 
-export function DataListFilters(props: { title: string, children?: any }) {
-    return (
-        <div className="col-xs-12 col-lg-3">
-            <div className="x-in--title">{props.title}</div>
-            {props.children}
-        </div>
-    );
+export class DataListFilters extends React.Component<{ title: string, children?: any }, { isShown: boolean }> {
+    constructor(props: { title: string, children?: any }) {
+        super(props);
+
+        this.state = {
+            isShown: false
+        };
+    }
+
+    render() {
+        return (
+            <div className="col-xs-12 col-md-3">
+                <div className={'x-filters' + (this.state.isShown ? ' is-shown' : '')}>
+                    <a className="x-filters--head" href="#" onClick={(e) => { e.preventDefault(); this.setState({ isShown: true }); }}>Filters</a>
+                    <div className="x-filters--body">
+                        <a className="x-filters--close" href="#" onClick={(e) => { e.preventDefault(); this.setState({ isShown: false }); }}><i className="icon-close" /></a>
+
+                        <div className="x-in--title">{this.props.title}</div>
+                        {this.props.children}
+
+                        <div className="x-join visible-xs visible-sm">
+                            <div className="x-join--btn"><a className="x-btn is-block" href="#" onClick={(e) => { e.preventDefault(); this.setState({ isShown: false }); }}>Apply filters</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 }
 
-export function DataListContent(props: { title: string, newUnits: number, newUnitsVerified: number, children?: any }) {
+export function DataListContent(props: { title: string, totalProjects: number, totalProjectsVerified: number, newUnits: number, newUnitsVerified: number, children?: any }) {
     return (
-        <div className="col-xs-12 col-lg-9">
-            {(props.newUnits !== 0) && (props.newUnitsVerified === 0) && <div className="x-in--title">{props.newUnits}<span>Net new units</span></div>}
-            {(props.newUnits !== 0) && (props.newUnitsVerified !== 0) && <div className="x-in--title">{props.newUnits}<span>Net new units</span><span className="is-verified">Verified</span>{props.newUnitsVerified}<span>Net new units</span></div>}
-            {(props.newUnits === 0) && <div className="x-in--title">{props.title}</div>}
-
+        <div className="col-xs-12 col-md-9">
+            <div className="x-in--title hidden-xs">
+                {(props.totalProjects !== 0) && <div>{props.totalProjects}<span>Buildings</span></div>}
+                {(props.newUnits !== 0) && <div>{props.newUnits}<span>Net new units</span></div>}
+                {((props.totalProjectsVerified !== 0) || (props.newUnitsVerified !== 0)) && <span className="is-verified">Verified</span>}
+                {(props.totalProjectsVerified !== 0) && <div>{props.totalProjectsVerified}<span>Buildings</span></div>}
+                {(props.newUnitsVerified !== 0) && <div>{props.newUnitsVerified}<span>Net new units</span></div>}
+            </div>
             {props.children}
         </div>
     );
@@ -84,7 +108,7 @@ export const DataListSearch = withRouter<{ searchKey: string }>(props => {
     }
     return (
         <div className="x-search">
-            <form className="x-search--box" method="POST" action="">
+            <div className="x-search--box">
                 <input
                     className="x-search--input"
                     type="text"
@@ -106,7 +130,7 @@ export const DataListSearch = withRouter<{ searchKey: string }>(props => {
                     }}
                 />
                 <button className="x-search--button" type="submit"><i className="icon-search">{}</i></button>
-            </form>
+            </div>
         </div>
     );
 });

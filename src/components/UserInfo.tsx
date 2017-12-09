@@ -41,7 +41,7 @@ export class UserInfoProvider extends React.Component<{ user?: User, account: Ac
     }
 }
 
-interface UserInfoComponentProps {
+export interface UserInfoComponentProps {
     user?: User;
     account: Account;
     isLoggedIn: boolean;

@@ -3,63 +3,113 @@ import { withUserInfo } from './UserInfo';
 import { Link } from './Link';
 import { withRouter } from '../utils/withRouter';
 
-export const Header = withUserInfo((props) => {
-    return (
-        <div className="x-top">
-            <div className="x-container is-wide clearfix">
-                <Link className="x-top--label" path="/">San Francisco Housing Forecast</Link>
-                <div className="x-top--tabs">
-                    <Link className="x-top--tab" path="/">Home</Link>
-                    <Link className="x-top--tab is-active" path="/pipeline">Pipeline Explorer</Link>
-                    {/* <a className="x-top--tab is-active" href="#">Dashboard</a>
-                    <a className="x-top--tab" href="#">Pipeline Explorer</a> */}
-                </div>
-                <ul className="x-top--nav">
-                    {props.user && (<li className="x-top--item"><span><img src={props.user.picture} alt="" />{props.user.firstName} {' '} {props.user.lastName}</span></li>)}
-                    {props.user && (<li className="x-top--item is-join"><button onClick={e => { props.doLogout(); }}>Sign Out</button></li>)}
+export class Header extends React.Component<{}, { isShown: boolean }> {
+    constructor(props: {}) {
+        super(props);
 
-                    {!props.user && (<li className="x-top--item"><button onClick={e => { props.doLogin(); }}>Sign In</button></li>)}
-                    {!props.user && (<li className="x-top--item is-join"><a target="_blank" href="https://goo.gl/forms/YX8LSpH6jWLzbEj02">Join</a></li>)}
-                </ul>
+        this.state = {
+            isShown: false
+        };
+    }
+
+    render() {
+        return (
+            <div className={'x-top' + (this.state.isShown ? ' is-shown' : '')}>
+                <div className="x-container is-wide clearfix">
+                    <Link className="x-top--label hidden-xs hidden-sm" path="/">San Francisco Housing Forecast</Link>
+                    <Link className="x-top--label visible-xs visible-sm" path="/">SF Housing Forecast</Link>
+                    <a className="x-top--open visible-xs" href="#" onClick={(e) => { e.preventDefault(); this.setState({ isShown: !this.state.isShown }); }}>{}</a>
+                    <div className="x-top--tabs hidden-xs">
+                        <Link className="x-top--tab" path="/">Home</Link>
+                        <Link className="x-top--tab is-active" path="/pipeline">Pipeline Explorer</Link>
+                    </div>
+
+                    <div className="x-top--nav hidden-xs">
+                        <HeaderNavItems />
+                    </div>
+                </div>
+
+                <div className="x-top--menu">
+                    <div className="x-container">
+                        <div className="x-top--tabs">
+                            <Link className="x-top--tab" path="/">Home</Link>
+                            <Link className="x-top--tab is-active" path="/pipeline">Pipeline Explorer</Link>
+                        </div>
+
+                        <div className="x-top--nav">
+                            <HeaderNavItems />
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+        );
+    }
+}
+
+const HeaderNavItems = withUserInfo((props) => {
+    return (
+        <ul>
+            {props.user && (<li className="x-top--item"><span><img src={props.user.picture} alt="" />{props.user.firstName} {' '} {props.user.lastName}</span></li>)}
+            {props.user && (<li className="x-top--item is-join"><button onClick={e => {  props.doLogout(); }}>Sign Out</button></li>)}
+
+            {!props.user && (<li className="x-top--item"><button onClick={e => { props.doLogin(); }}>Sign In</button></li>)}
+            {!props.user && (<li className="x-top--item is-join"><a target="_blank" href="https://goo.gl/forms/YX8LSpH6jWLzbEj02">Join</a></li>)}
+        </ul>
     );
 });
 
-export const HeaderLarge = withUserInfo((props) => {
+export const HeaderLargeNavItems = withUserInfo((props) => {
     return (
-        <div className="x-intro">
-            <div className="x-container">
-                <div className="x-header">
-                    <a className="x-header--logo" href="https://statecraft.one/"><img src="/static/img/logotype.svg" alt="" /></a>
-                    <ul className="x-header--nav">
-                        <li className="x-header--item"><Link path="/pipeline">Explore Pipeline</Link></li>
+        <ul>
+            <li className="x-header--item is-block"><Link path="/pipeline">Explore Pipeline</Link></li>
 
-                        {props.user &&
-                            <li className="x-header--item"><span><img src={props.user.picture} alt="" />{props.user.firstName} {props.user.lastName}</span></li>
-                        }
-                        {props.user &&
-                            <li className="x-header--item is-join"><button onClick={e => { props.doLogout(); }}>Sign Out</button></li>
-                        }
-                        {!props.user &&
-                            <li className="x-header--item"><button onClick={e => { props.doLogin(); }}>Sign In</button></li>
-                        }
-                        {!props.user &&
-                            (<li className="x-header--item is-join"><a target="_blank" href="https://goo.gl/forms/YX8LSpH6jWLzbEj02">Join</a></li>)
-                        }
-                    </ul>
-                </div>
-                <div className="x-intro--in">
-                    {props.children}
-                </div>
-            </div>
-        </div>
+            {props.user && (<li className="x-header--item"><span><img src={props.user.picture} alt="" />{props.user.firstName} {props.user.lastName}</span></li>)}
+            {props.user && (<li className="x-header--item is-join"><button onClick={e => { props.doLogout(); }}>Sign Out</button></li>)}
+            {!props.user && (<li className="x-header--item"><button onClick={e => { props.doLogin(); }}>Sign In</button></li>)}
+            {!props.user && (<li className="x-header--item is-join"><a target="_blank" href="https://goo.gl/forms/YX8LSpH6jWLzbEj02">Join</a></li>)}
+        </ul>
     );
 });
 
-export function HeaderLargeTitle(props: { title: string }) {
+export class HeaderLarge extends React.Component<{ children: any }, { isShown: boolean }> {
+    constructor(props: { children: any }) {
+        super(props);
+
+        this.state = {
+            isShown: false
+        };
+    }
+
+    render() {
+        return (
+            <div className="x-intro">
+                <div className="x-container">
+                    <div className={'x-header' + (this.state.isShown ? ' is-shown' : '')}>
+                        <a className="x-header--logo" href="https://statecraft.one/"><img src="/img/logotype.svg" alt="" /></a>
+                        <a className="x-header--open visible-xs" href="#" onClick={(e) => { e.preventDefault(); this.setState({ isShown: !this.state.isShown }); }}>{}</a>
+
+                        <div className="x-header--nav hidden-xs">
+                            <HeaderLargeNavItems />
+                        </div>
+
+                        <div className="x-header--menu">
+                            <div className="x-header--nav">
+                                <HeaderLargeNavItems />
+                            </div>
+                        </div>
+                    </div>
+                    <div className="x-intro--in">
+                        {this.props.children}
+                    </div>
+                </div>
+            </div>
+        );
+    }
+}
+
+export function HeaderLargeTitle(props: { title?: string, children?: any }) {
     return (
-        <div className="x-intro--title">{props.title}</div>
+        <div className="x-intro--title">{props.title}{props.children}</div>
     );
 }
 
