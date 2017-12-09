@@ -28,7 +28,7 @@ class AuthenticationHandler extends React.Component<{}, { error: boolean }> {
 
     async completeAuth() {
         let auth = await this.retreiveAuthentication();
-        var uploaded = await fetch('https://statecraft-api.herokuapp.com/auth', {
+        var uploaded = await fetch(process.env.API_ENDPOINT + '/auth', {
             method: 'POST',
             headers: [
                 ['authorization', 'Bearer ' + auth.idToken],

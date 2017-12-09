@@ -18,8 +18,7 @@ const buildClient = (domain: string, initialState?: any, token?: string) => {
     }
     return new ApolloClient({
         link: new HttpLink({
-            uri: 'https://statecraft-api.herokuapp.com/api/',
-            // uri: 'http://localhost:9000/api/',
+            uri: process.env.API_ENDPOINT + '/api/',
             headers: headers
         }),
         cache: cache,
